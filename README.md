@@ -7,9 +7,10 @@ Every member built an **About me** page with React + Vite, deployed it to Vercel
 
 ## Crew
 
-| Name | Role | About me page |
-|------|------|---------------|
-| *Example: Your Name* | *Member* | *<https://your-link.vercel.app>* |
+| Name | Role | About me page | Branch
+|------|------|---------------|---------|
+| Jamiu Muritala | *Captain* | <https://about-me-two-cyan.vercel.app> | [`mury`](../../tree/mury) |
+| *Example: Your Name* | *Member* | *<https://your-link.vercel.app>* | [`yourname`]((../../tree/<yourname>)) |
 
 The example row shows the format. Add your own row at the bottom of the table (see "Add yourself" below). Don't edit the example row.
 
