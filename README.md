@@ -10,14 +10,9 @@ Every member built an **About me** page with React + Vite, deployed it to Vercel
 | Name | Role | About me page | Branch
 |------|------|---------------|---------|
 | Jamiu Muritala | *Captain* | <https://about-me-two-cyan.vercel.app> | [`mury`](../../tree/mury) |
-<<<<<<< mury
-=======
 | Azuwuike Victor | *Member* | <https://about-me-six-amber.vercel.app> | [`add-victor`](../../tree/add-victor) |
 | Faizat Adebiyi | Member |https://septaaifullstackdevelopmentprojects.vercel.app/| [`faizat`]((../../tree/faizat)) |
->>>>>>> local
 | *Example: Your Name* | *Member* | *<https://your-link.vercel.app>* | [`yourname`]((../../tree/<yourname>)) |
-| Azuwuike Victor | *Member* | <https://about-me-six-amber.vercel.app> | [`add-victor`](../../tree/add-victor) |
-| Faizat Adebiyi | Member |https://septaaifullstackdevelopmentprojects.vercel.app/| [`faizat`]((../../tree/faizat)) |
 
 The example row shows the format. Add your own row at the bottom of the table (see "Add yourself" below). Don't edit the example row.
 
