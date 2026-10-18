@@ -1,6 +1,6 @@
 # 🌅 AI -FsD — Group 1
 
-**Repository:** <https://github.com/CAPTAIN/AI-FD-Group-1>
+**Repository:** <https://github.com/murytarlah/AI-FD-Group-1>
 
 Group 1's shared repository for the Saturday AI full-stack session (17 October 2026).
 Every member built an **About me** page with React + Vite, deployed it to Vercel, and added their name and link to the table below.
@@ -10,6 +10,11 @@ Every member built an **About me** page with React + Vite, deployed it to Vercel
 | Name | Role | About me page | Branch
 |------|------|---------------|---------|
 | Jamiu Muritala | *Captain* | <https://about-me-two-cyan.vercel.app> | [`mury`](../../tree/mury) |
+<<<<<<< mury
+=======
+| Azuwuike Victor | *Member* | <https://about-me-six-amber.vercel.app> | [`add-victor`](../../tree/add-victor) |
+| Faizat Adebiyi | Member |https://septaaifullstackdevelopmentprojects.vercel.app/| [`faizat`]((../../tree/faizat)) |
+>>>>>>> local
 | *Example: Your Name* | *Member* | *<https://your-link.vercel.app>* | [`yourname`]((../../tree/<yourname>)) |
 | Azuwuike Victor | *Member* | <https://about-me-six-amber.vercel.app> | [`add-victor`](../../tree/add-victor) |
 | Faizat Adebiyi | Member |https://septaaifullstackdevelopmentprojects.vercel.app/| [`faizat`]((../../tree/faizat)) |
