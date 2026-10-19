@@ -12,6 +12,7 @@ Every member built an **About me** page with React + Vite, deployed it to Vercel
 | Jamiu Muritala | *Captain* | <https://about-me-two-cyan.vercel.app> | [`mury`](../../tree/mury) |
 | Azuwuike Victor | *Member* | <https://about-me-six-amber.vercel.app> | [`add-victor`](../../tree/add-victor) |
 | Faizat Adebiyi | Member |https://septaaifullstackdevelopmentprojects.vercel.app/| [`faizat`]((../../tree/faizat)) |
+| Ajayi oluwadarasimi | Member |https://about-848v7kbi6-samuelajayioluwadarasimi-9961.vercel.app/| [`add-Darasimi`]((../../tree/add-darasimi)) |
 | *Example: Your Name* | *Member* | *<https://your-link.vercel.app>* | [`yourname`]((../../tree/<yourname>)) |
 
 The example row shows the format. Add your own row at the bottom of the table (see "Add yourself" below). Don't edit the example row.
