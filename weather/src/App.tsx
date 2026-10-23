@@ -15,12 +15,41 @@ type Location = {
   state?: string
   country: string
   temperature: number
+  forecast: DailyForecast[]
 }
 
 type WeatherResponse = {
   current?: {
     temperature_2m: number
   }
+  daily?: {
+    time: string[]
+    temperature_2m_max: number[]
+    temperature_2m_min: number[]
+  }
+}
+
+type DailyForecast = {
+  date: string
+  maximum: number
+  minimum: number
+}
+
+function DailyForecastCard({ day }: { day: DailyForecast }) {
+  const weekday = new Date(`${day.date}T12:00:00`).toLocaleDateString(
+    undefined,
+    { weekday: 'short' },
+  )
+
+  return (
+    <article className="forecast-day">
+      <p className="forecast-weekday">{weekday}</p>
+      <p className="forecast-temperatures">
+        <span>{day.maximum.toFixed(1)}°</span>
+        <span>{day.minimum.toFixed(1)}°</span>
+      </p>
+    </article>
+  )
 }
 
 function App() {
@@ -57,7 +86,7 @@ function App() {
       }
 
       const weatherResponse = await fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${result.latitude}&longitude=${result.longitude}&current=temperature_2m&temperature_unit=celsius`,
+        `https://api.open-meteo.com/v1/forecast?latitude=${result.latitude}&longitude=${result.longitude}&current=temperature_2m&daily=temperature_2m_max,temperature_2m_min&forecast_days=3&temperature_unit=celsius&timezone=auto`,
       )
       if (!weatherResponse.ok) {
         throw new Error('Could not load the temperature.')
@@ -65,7 +94,14 @@ function App() {
 
       const weatherData: WeatherResponse = await weatherResponse.json()
       const temperature = weatherData.current?.temperature_2m
-      if (temperature === undefined) {
+      const daily = weatherData.daily
+      if (
+        temperature === undefined ||
+        !daily ||
+        daily.time.length < 3 ||
+        daily.temperature_2m_max.length < 3 ||
+        daily.temperature_2m_min.length < 3
+      ) {
         throw new Error('Temperature was not available.')
       }
 
@@ -73,6 +109,11 @@ function App() {
         state: result.admin1,
         country: result.country,
         temperature,
+        forecast: daily.time.slice(0, 3).map((date, index) => ({
+          date,
+          maximum: daily.temperature_2m_max[index],
+          minimum: daily.temperature_2m_min[index],
+        })),
       })
     } catch (searchError) {
       setError(
@@ -115,6 +156,16 @@ function App() {
           </p>
           <p className="temperature">{location.temperature.toFixed(1)}°C</p>
         </div>
+      )}
+      {location && (
+        <section className="forecast" aria-labelledby="forecast-title">
+          <h2 id="forecast-title">NEXT 3 DAYS</h2>
+          <div className="forecast-list">
+            {location.forecast.map((day) => (
+              <DailyForecastCard key={day.date} day={day} />
+            ))}
+          </div>
+        </section>
       )}
     </main>
   )
