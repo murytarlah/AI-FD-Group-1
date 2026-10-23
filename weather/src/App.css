@@ -1,0 +1,47 @@
+#root {
+  min-height: 100vh;
+}
+
+.weather-card {
+  width: min(100% - 2rem, 38rem);
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0 0 0.75rem;
+  color: #2563eb;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  color: #172554;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  line-height: 1.1;
+}
+
+.message,
+.temperature {
+  margin: 2rem 0 0;
+}
+
+.message {
+  color: #475569;
+}
+
+.error {
+  color: #b91c1c;
+}
+
+.temperature {
+  color: #2563eb;
+  font-size: clamp(4rem, 15vw, 7rem);
+  font-weight: 700;
+  letter-spacing: -0.06em;
+  line-height: 1;
+}
