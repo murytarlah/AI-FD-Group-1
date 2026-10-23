@@ -1,47 +1,111 @@
 #root {
   min-height: 100vh;
+  display: grid;
+  place-items: center;
 }
 
 .weather-card {
   width: min(100% - 2rem, 38rem);
-  margin: 0 auto;
-  padding: 4rem 2rem;
-  text-align: center;
-}
-
-.eyebrow {
-  margin: 0 0 0.75rem;
-  color: #2563eb;
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  box-sizing: border-box;
+  margin: 2rem auto;
+  padding: 3rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1.5rem;
+  background: rgba(15, 23, 42, 0.48);
+  box-shadow: 0 2rem 5rem rgba(2, 6, 23, 0.45);
+  backdrop-filter: blur(1.25rem);
 }
 
 h1 {
   margin: 0;
-  color: #172554;
+  color: #f8fafc;
   font-size: clamp(2rem, 6vw, 3.5rem);
   line-height: 1.1;
 }
 
+.search-form {
+  margin: 2rem 0 0;
+}
+
+.search-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #cbd5e1;
+  font-weight: 600;
+}
+
+.search-controls {
+  display: flex;
+  gap: 0.75rem;
+}
+
+input,
+button {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 0.4rem;
+  font: inherit;
+  padding: 0.7rem 0.8rem;
+}
+
+input {
+  min-width: 0;
+  flex: 1;
+  color: #f8fafc;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+input::placeholder {
+  color: #94a3b8;
+}
+
+button {
+  border-color: rgba(125, 211, 252, 0.5);
+  color: white;
+  background: rgba(37, 99, 235, 0.75);
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
 .message,
-.temperature {
+.result {
   margin: 2rem 0 0;
 }
 
 .message {
-  color: #475569;
+  color: #cbd5e1;
 }
 
 .error {
-  color: #b91c1c;
+  color: #fda4af;
+}
+
+.result {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.result p {
+  margin: 0.35rem 0;
+  color: #f8fafc;
 }
 
 .temperature {
-  color: #2563eb;
-  font-size: clamp(4rem, 15vw, 7rem);
+  color: #7dd3fc;
+  font-size: 2rem;
   font-weight: 700;
-  letter-spacing: -0.06em;
-  line-height: 1;
+}
+
+@media (max-width: 520px) {
+  .weather-card {
+    padding: 2rem 1.25rem;
+  }
+
+  .search-controls {
+    flex-direction: column;
+  }
 }
