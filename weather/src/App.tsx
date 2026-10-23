@@ -14,18 +14,29 @@ type GeocodingResponse = {
 type Location = {
   state?: string
   country: string
+  time: string
   temperature: number
+  feelsLike: number
+  humidity: number
+  windSpeed: number
+  weatherCode: number
   forecast: DailyForecast[]
 }
 
 type WeatherResponse = {
   current?: {
+    time: string
     temperature_2m: number
+    apparent_temperature: number
+    relative_humidity_2m: number
+    wind_speed_10m: number
+    weather_code: number
   }
   daily?: {
     time: string[]
     temperature_2m_max: number[]
     temperature_2m_min: number[]
+    weather_code: number[]
   }
 }
 
@@ -33,9 +44,34 @@ type DailyForecast = {
   date: string
   maximum: number
   minimum: number
+  weatherCode: number
+}
+
+function getWeatherSummary(code: number) {
+  if (code === 0) return { label: 'Clear sky', icon: '☀' }
+  if (code === 1) return { label: 'Mainly clear', icon: '☀' }
+  if (code === 2) return { label: 'Partly cloudy', icon: '◐' }
+  if (code === 3) return { label: 'Overcast', icon: '☁' }
+  if (code === 45 || code === 48) return { label: 'Foggy', icon: '≋' }
+  if (code >= 51 && code <= 67) return { label: 'Rainy', icon: '☂' }
+  if (code >= 71 && code <= 77) return { label: 'Snowy', icon: '❄' }
+  if (code >= 80 && code <= 82) return { label: 'Rain showers', icon: '☂' }
+  if (code === 85 || code === 86) return { label: 'Snow showers', icon: '❄' }
+  if (code >= 95 && code <= 99) {
+    return { label: 'Thunderstorm', icon: '⚡' }
+  }
+  return { label: 'Unknown conditions', icon: '☁' }
+}
+
+function formatLocalTime(time: string) {
+  return new Date(time).toLocaleTimeString(undefined, {
+    hour: 'numeric',
+    minute: '2-digit',
+  })
 }
 
 function DailyForecastCard({ day }: { day: DailyForecast }) {
+  const weather = getWeatherSummary(day.weatherCode)
   const weekday = new Date(`${day.date}T12:00:00`).toLocaleDateString(
     undefined,
     { weekday: 'short' },
@@ -44,6 +80,9 @@ function DailyForecastCard({ day }: { day: DailyForecast }) {
   return (
     <article className="forecast-day">
       <p className="forecast-weekday">{weekday}</p>
+      <span className="forecast-icon" role="img" aria-label={weather.label}>
+        {weather.icon}
+      </span>
       <p className="forecast-temperatures">
         <span>{day.maximum.toFixed(1)}°</span>
         <span>{day.minimum.toFixed(1)}°</span>
@@ -86,7 +125,7 @@ function App() {
       }
 
       const weatherResponse = await fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${result.latitude}&longitude=${result.longitude}&current=temperature_2m&daily=temperature_2m_max,temperature_2m_min&forecast_days=3&temperature_unit=celsius&timezone=auto`,
+        `https://api.open-meteo.com/v1/forecast?latitude=${result.latitude}&longitude=${result.longitude}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code&daily=temperature_2m_max,temperature_2m_min,weather_code&forecast_days=3&temperature_unit=celsius&timezone=auto`,
       )
       if (!weatherResponse.ok) {
         throw new Error('Could not load the temperature.')
@@ -94,13 +133,16 @@ function App() {
 
       const weatherData: WeatherResponse = await weatherResponse.json()
       const temperature = weatherData.current?.temperature_2m
+      const current = weatherData.current
       const daily = weatherData.daily
       if (
+        !current ||
         temperature === undefined ||
         !daily ||
         daily.time.length < 3 ||
         daily.temperature_2m_max.length < 3 ||
-        daily.temperature_2m_min.length < 3
+        daily.temperature_2m_min.length < 3 ||
+        daily.weather_code.length < 3
       ) {
         throw new Error('Temperature was not available.')
       }
@@ -108,11 +150,17 @@ function App() {
       setLocation({
         state: result.admin1,
         country: result.country,
+        time: current.time,
         temperature,
+        feelsLike: current.apparent_temperature,
+        humidity: current.relative_humidity_2m,
+        windSpeed: current.wind_speed_10m,
+        weatherCode: current.weather_code,
         forecast: daily.time.slice(0, 3).map((date, index) => ({
           date,
           maximum: daily.temperature_2m_max[index],
           minimum: daily.temperature_2m_min[index],
+          weatherCode: daily.weather_code[index],
         })),
       })
     } catch (searchError) {
@@ -125,6 +173,10 @@ function App() {
       setIsSearching(false)
     }
   }
+
+  const currentWeather = location
+    ? getWeatherSummary(location.weatherCode)
+    : null
 
   return (
     <main className="weather-card">
@@ -151,10 +203,28 @@ function App() {
       )}
       {location && (
         <div className="result" aria-live="polite">
-          <p>
+          <p className="location-name">
             {[location.state, location.country].filter(Boolean).join(', ')}
           </p>
-          <p className="temperature">{location.temperature.toFixed(1)}°C</p>
+          <div className="weather-summary">
+            <span
+              className="weather-icon"
+              role="img"
+              aria-label={currentWeather?.label}
+            >
+              {currentWeather?.icon}
+            </span>
+            <div>
+              <p className="temperature">{location.temperature.toFixed(1)}°C</p>
+              <p className="condition">{currentWeather?.label}</p>
+            </div>
+          </div>
+          <div className="weather-details">
+            <p>Local time: {formatLocalTime(location.time)}</p>
+            <p>Feels like: {location.feelsLike.toFixed(1)}°C</p>
+            <p>Humidity: {location.humidity}%</p>
+            <p>Wind: {location.windSpeed.toFixed(1)} km/h</p>
+          </div>
         </div>
       )}
       {location && (

@@ -1,7 +1,7 @@
 :root {
   font-family: Inter, system-ui, sans-serif;
-  color: #e2e8f0;
-  background: #090b20;
+  color: #e4e4e7;
+  background: #09090b;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -11,5 +11,5 @@ body {
   min-width: 320px;
   min-height: 100vh;
   margin: 0;
-  background: linear-gradient(145deg, #172554, #0f172a 55%, #020617);
+  background: #09090b;
 }
