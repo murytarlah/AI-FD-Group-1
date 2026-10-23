@@ -100,6 +100,54 @@ button:disabled {
   font-weight: 600;
 }
 
+.forecast {
+  margin-top: 2rem;
+}
+
+.forecast h2 {
+  margin: 0 0 0.75rem;
+  color: rgba(203, 213, 225, 0.55);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+}
+
+.forecast-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.forecast-day {
+  padding: 0.75rem 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.04);
+  text-align: center;
+}
+
+.forecast-day p {
+  margin: 0;
+}
+
+.forecast-weekday {
+  color: #cbd5e1;
+  font-size: 0.8rem;
+}
+
+.forecast-temperatures {
+  display: flex;
+  justify-content: center;
+  gap: 0.45rem;
+  margin-top: 0.5rem !important;
+  color: #7dd3fc;
+  font-size: 0.85rem;
+}
+
+.forecast-temperatures span + span {
+  color: #94a3b8;
+}
+
 @media (max-width: 520px) {
   .weather-card {
     padding: 1.75rem 1.25rem;
