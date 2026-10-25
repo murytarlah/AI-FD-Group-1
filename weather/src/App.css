@@ -1,17 +1,197 @@
 #root {
   min-height: 100vh;
+}
+
+.weather-page {
+  position: relative;
   display: grid;
+  min-height: 100vh;
   place-items: center;
 }
 
 .weather-card {
-  width: min(100% - 2rem, 32rem);
+  position: relative;
+  z-index: 1;
+  width: min(100% - 2rem, 40rem);
   box-sizing: border-box;
   margin: 2rem auto;
-  padding: 2.25rem;
+  padding: 2.5rem;
   border: 1px solid #3f3f46;
-  background: #18181b;
-  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.28);
+  background: rgba(24, 24, 27, 0.82);
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
+}
+
+/* Full-screen weather scene behind the card */
+
+.weather-scene {
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #09090b;
+  animation: scene-in 700ms ease both;
+}
+
+.scene-sunny {
+  background: linear-gradient(200deg, #2a1d06 0%, #120f08 40%, #09090b 75%);
+}
+
+.scene-cloudy {
+  --cloud-color: rgba(161, 161, 170, 0.16);
+  background: linear-gradient(180deg, #1f1f23 0%, #141417 50%, #09090b 100%);
+}
+
+.scene-rainy {
+  --cloud-color: rgba(71, 85, 105, 0.35);
+  background: linear-gradient(180deg, #0c1626 0%, #0a0f18 50%, #09090b 100%);
+}
+
+.scene-snowy {
+  background: linear-gradient(180deg, #1a2433 0%, #111827 50%, #0b0f17 100%);
+}
+
+.sun-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at calc(100% - 3rem) 3rem,
+    rgba(250, 204, 21, 0.18),
+    transparent 50%
+  );
+}
+
+.sun-rays {
+  position: absolute;
+  top: -42rem;
+  right: -42rem;
+  width: 90rem;
+  height: 90rem;
+  border-radius: 50%;
+  background: repeating-conic-gradient(
+    rgba(253, 224, 71, 0.07) 0deg 6deg,
+    transparent 6deg 18deg
+  );
+  mask-image: radial-gradient(circle, black 0%, transparent 60%);
+  animation: rays-spin 90s linear infinite;
+}
+
+.sun {
+  position: absolute;
+  top: -6rem;
+  right: -6rem;
+  width: 18rem;
+  height: 18rem;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    #fde68a 0%,
+    #facc15 45%,
+    rgba(250, 204, 21, 0) 70%
+  );
+  animation: sun-pulse 6s ease-in-out infinite alternate;
+}
+
+.cloud {
+  position: absolute;
+  top: var(--y);
+  left: 0;
+  width: calc(20rem * var(--scale));
+  height: calc(6rem * var(--scale));
+  border-radius: 999px;
+  background: var(--cloud-color);
+  filter: blur(20px);
+  animation: cloud-drift var(--duration) linear var(--delay) infinite;
+}
+
+.cloud::before,
+.cloud::after {
+  position: absolute;
+  border-radius: 50%;
+  background: inherit;
+  content: '';
+}
+
+.cloud::before {
+  bottom: 20%;
+  left: 18%;
+  width: 55%;
+  height: 160%;
+}
+
+.cloud::after {
+  right: 15%;
+  bottom: 15%;
+  width: 40%;
+  height: 130%;
+}
+
+.raindrop {
+  position: absolute;
+  top: 0;
+  left: var(--x);
+  width: 1.5px;
+  height: var(--length);
+  background: linear-gradient(transparent, rgba(147, 197, 253, 0.6));
+  animation: rainfall var(--duration) linear var(--delay) infinite;
+}
+
+.snowflake {
+  position: absolute;
+  top: 0;
+  left: var(--x);
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background: #f0f9ff;
+  box-shadow: 0 0 6px rgba(224, 242, 254, 0.8);
+  opacity: 0.85;
+  animation: snowfall var(--duration) linear var(--delay) infinite;
+}
+
+@keyframes scene-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes rays-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes sun-pulse {
+  from { transform: scale(0.95); opacity: 0.45; }
+  to { transform: scale(1.05); opacity: 0.65; }
+}
+
+@keyframes cloud-drift {
+  from { transform: translateX(-30rem); }
+  to { transform: translateX(calc(100vw + 5rem)); }
+}
+
+@keyframes rainfall {
+  from { transform: translate3d(0, -15vh, 0) rotate(12deg); }
+  to { transform: translate3d(-25vh, 110vh, 0) rotate(12deg); }
+}
+
+@keyframes snowfall {
+  0% { transform: translate3d(0, -5vh, 0); }
+  50% { transform: translate3d(var(--drift), 50vh, 0); }
+  100% { transform: translate3d(0, 105vh, 0); }
+}
+
+/* Freeze the scene in place instead of animating it */
+@media (prefers-reduced-motion: reduce) {
+  .weather-scene > * {
+    animation-play-state: paused;
+  }
+}
+
+.app-kicker {
+  margin: 0 0 0.65rem;
+  color: #71717a;
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
 }
 
 h1 {
@@ -21,8 +201,14 @@ h1 {
   line-height: 1.1;
 }
 
+.app-subtitle {
+  margin: 0.6rem 0 0;
+  color: #a1a1aa;
+  font-size: 0.9rem;
+}
+
 .search-form {
-  margin: 1.5rem 0 0;
+  margin: 2.25rem 0 0;
 }
 
 .search-form label {
@@ -34,12 +220,12 @@ h1 {
 
 .search-controls {
   display: flex;
-  gap: 0.75rem;
+  gap: 0;
 }
 
 input,
 button {
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 1px solid #52525b;
   border-radius: 0;
   font: inherit;
   padding: 0.7rem 0.8rem;
@@ -50,6 +236,13 @@ input {
   flex: 1;
   color: #f8fafc;
   background: #27272a;
+  outline: none;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+input:focus {
+  border-color: #a1a1aa;
+  background: #303034;
 }
 
 input::placeholder {
@@ -57,10 +250,20 @@ input::placeholder {
 }
 
 button {
-  border-color: #52525b;
+  min-width: 6.5rem;
+  border-left: 0;
   color: white;
   background: #52525b;
   cursor: pointer;
+  transition: background 160ms ease;
+}
+
+button span {
+  margin-right: 0.35rem;
+}
+
+button:hover:not(:disabled) {
+  background: #71717a;
 }
 
 button:disabled {
@@ -70,7 +273,7 @@ button:disabled {
 
 .message,
 .result {
-  margin: 1.5rem 0 0;
+  margin: 1.75rem 0 0;
 }
 
 .message {
@@ -82,7 +285,7 @@ button:disabled {
 }
 
 .result {
-  padding: 1rem;
+  padding: 1.25rem;
   border: 1px solid #3f3f46;
   background: #202023;
 }
@@ -93,26 +296,38 @@ button:disabled {
 }
 
 .location-name {
-  font-size: 1.1rem;
-  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.location-name small {
+  color: #a1a1aa;
+  font-size: 0.8rem;
+  font-weight: 400;
 }
 
 .weather-summary {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-top: 1rem;
+  margin-top: 1.25rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid #3f3f46;
 }
 
 .weather-icon {
-  color: #d4d4d8;
-  font-size: 3rem;
+  color: #f4f4f5;
+  font-size: 3.5rem;
   line-height: 1;
 }
 
 .temperature {
   color: #f4f4f5;
-  font-size: 1.5rem;
+  font-size: 2.25rem;
+  letter-spacing: -0.04em;
   font-weight: 600;
 }
 
@@ -125,9 +340,7 @@ button:disabled {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.4rem 1rem;
-  margin-top: 1.25rem;
-  padding-top: 1rem;
-  border-top: 1px solid #3f3f46;
+  margin-top: 1rem;
 }
 
 .weather-details p {
@@ -136,7 +349,7 @@ button:disabled {
 }
 
 .forecast {
-  margin-top: 2rem;
+  margin-top: 2.5rem;
 }
 
 .forecast h2 {
@@ -150,15 +363,22 @@ button:disabled {
 .forecast-list {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
 
 .forecast-day {
-  padding: 0.75rem 0.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  min-width: 0;
+  padding: 1rem 0.75rem;
+  border: 1px solid #3f3f46;
   border-radius: 0;
   background: #202023;
   text-align: center;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.forecast-day:hover {
+  border-color: #71717a;
+  background: #27272a;
 }
 
 .forecast-day p {
@@ -167,26 +387,36 @@ button:disabled {
 
 .forecast-weekday {
   color: #cbd5e1;
+  font-weight: 600;
   font-size: 0.8rem;
+}
+
+.forecast-date {
+  color: #71717a !important;
+  font-size: 0.7rem;
 }
 
 .forecast-icon {
   display: block;
-  margin: 0.45rem 0;
+  margin: 0.9rem 0;
   color: #d4d4d8;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
 }
 
 .forecast-temperatures {
   display: flex;
   justify-content: center;
-  gap: 0.45rem;
+  gap: 0.6rem;
   margin-top: 0.5rem !important;
-  color: #7dd3fc;
   font-size: 0.85rem;
 }
 
-.forecast-temperatures span + span {
+.forecast-high {
+  color: #f4f4f5;
+  font-weight: 600;
+}
+
+.forecast-low {
   color: #a1a1aa;
 }
 
@@ -201,5 +431,18 @@ button:disabled {
 
   .weather-details {
     grid-template-columns: 1fr;
+  }
+
+  .weather-card {
+    margin: 1rem auto;
+    padding: 1.5rem 1rem;
+  }
+
+  .forecast-list {
+    gap: 0.4rem;
+  }
+
+  .forecast-day {
+    padding-inline: 0.35rem;
   }
 }
