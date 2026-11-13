@@ -42,6 +42,14 @@ committing and never run git add . from this multi-project repository.
 
 ## Import the group repository in Vercel
 
+The prepared source is pushed on `secure-notes-vercel`:
+https://github.com/murytarlah/AI-FD-Group-1/tree/secure-notes-vercel
+
+At preparation time main contains only the group README, so importing main before
+the folder exists there cannot build this app. The simplest group workflow is to
+review/merge this branch's PR first, then import main. An alternative is to use this
+branch deliberately as the Vercel project's Production branch. No merge was performed.
+
 1. Sign in to Vercel and choose the intended personal/team account. Select
    Add New > Project, connect GitHub and import murytarlah/AI-FD-Group-1. Grant only
    the repository access required by your group. Existing Library deployments stay
@@ -53,7 +61,9 @@ committing and never run git add . from this multi-project repository.
    npm ci can install the committed package-lock.json reproducibly.
 4. Confirm which pushed branch will be deployed. Vercel normally selects the Git
    repository's production branch; a different deployment branch can be a Preview
-   until reviewed/merged or deliberately selected under the project's Git settings.
+   until reviewed/merged or deliberately selected under Settings > Environments >
+   Production > Branch Tracking. For a branch-only release, select secure-notes-vercel
+   there, then use Deployments > Create Deployment with that branch name or URL.
    Do not assume a deployment-branch commit has appeared on main automatically.
 5. Add the variables below before the initial deployment. Use Production for the
    public app. Configure Preview too only if you intend to test preview branches;
@@ -159,6 +169,10 @@ tracked. A targeted candidate-source credential scan found no secret/service-rol
 patterns; it is not an exhaustive scan of all past Git history or external logs.
 No public Vercel deployment or production-domain Supabase change is claimed by this
 document. Update the live-results column only after actually executing each test.
+All 43 local automated regression tests passed during preparation, including five
+HTTP checks against a temporary local production server. No live browser tests
+were performed. Vercel account access must be installed/connected or the dashboard
+steps completed by the project owner before a production URL can be obtained.
 
 Official references:
 - https://vercel.com/docs/git
