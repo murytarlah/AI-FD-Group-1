@@ -1,0 +1,8 @@
+# Defence in depth for direct CLI uploads; Git deployment already uses committed files.
+.env*
+!.env.example
+node_modules/
+.next/
+.git/
+.vercel/
+*.tsbuildinfo
